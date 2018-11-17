@@ -87,14 +87,33 @@ class Canvas(object):
         else:
             self.cells[row][column].data = data
 
-    def set_cell_format(self, row, column, height, width, cell_format):
+    @staticmethod
+    def _get_cell_format(args, kwds):
+        if len(args) == 0:
+            cell_format = CellFormat(**kwds)
+        elif len(args) == 1:
+            if isinstance(args[0], CellFormat):
+                cell_format = args[0]
+            elif isinstance(args[0], dict):
+                cell_format = CellFormat(**args[0])
+            else:
+                raise ValueError('Unexpected format input to Canvas.set_cell_format')
+        else:
+            raise ValueError('Unexpected format input to Canvas.set_cell_format')
+        return cell_format
+
+    def set_cell_format(self, row, column, height, width, *args, **kwds):
+        cell_format = self._get_cell_format(args, kwds)
+
         assert 0 <= row < row + height <= self.height
         assert 0 <= column < column + width <= self.width
         for i in range(row, row + height):
             for j in range(column, column + width):
                 self.cells[i][j].cell_format = cell_format
 
-    def add_cell_format(self, row, column, height, width, cell_format):
+    def add_cell_format(self, row, column, height, width, *args, **kwds):
+        cell_format = self._get_cell_format(args, kwds)
+
         assert 0 <= row < row + height <= self.height
         assert 0 <= column < column + width <= self.width
         for i in range(row, row + height):

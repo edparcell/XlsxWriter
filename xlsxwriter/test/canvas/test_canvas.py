@@ -13,6 +13,24 @@ class TestCanvas(unittest.TestCase):
                 if i < 2 and j < 2:
                     assert c.cells[i][j].cell_format.italic == 1
 
+    def test_set_format_with_dict(self):
+        c = Canvas(3, 3)
+        c.set_data(0, 0, [[0, 1, 2], [3, 4, 5], [6, 7, 8]])
+        c.set_cell_format(0, 0, 2, 2, {'italic': 1})
+        for i in range(3):
+            for j in range(3):
+                if i < 2 and j < 2:
+                    assert c.cells[i][j].cell_format.italic == 1
+
+    def test_set_format_with_kwds(self):
+        c = Canvas(3, 3)
+        c.set_data(0, 0, [[0, 1, 2], [3, 4, 5], [6, 7, 8]])
+        c.set_cell_format(0, 0, 2, 2, italic=1)
+        for i in range(3):
+            for j in range(3):
+                if i < 2 and j < 2:
+                    assert c.cells[i][j].cell_format.italic == 1
+
     def test_add_format(self):
         c = Canvas(3, 3)
         c.set_data(0, 0, [[0, 1, 2], [3, 4, 5], [6, 7, 8]])
@@ -24,3 +42,22 @@ class TestCanvas(unittest.TestCase):
         assert {'bold': 1, 'italic': 1} == c.cells[1][1].cell_format._asdict(include_none=False)
         assert {'bold': 1} == c.cells[2][2].cell_format._asdict(include_none=False)
 
+    def test_add_format_with_dict(self):
+        c = Canvas(3, 3)
+        c.set_data(0, 0, [[0, 1, 2], [3, 4, 5], [6, 7, 8]])
+        fmt_italic = CellFormat(italic=1)
+        c.set_cell_format(0, 0, 2, 2, fmt_italic)
+        c.add_cell_format(1, 1, 2, 2, {'bold': 1})
+        assert {'italic': 1} == c.cells[0][0].cell_format._asdict(include_none=False)
+        assert {'bold': 1, 'italic': 1} == c.cells[1][1].cell_format._asdict(include_none=False)
+        assert {'bold': 1} == c.cells[2][2].cell_format._asdict(include_none=False)
+
+    def test_add_format_with_kwds(self):
+        c = Canvas(3, 3)
+        c.set_data(0, 0, [[0, 1, 2], [3, 4, 5], [6, 7, 8]])
+        fmt_italic = CellFormat(italic=1)
+        c.set_cell_format(0, 0, 2, 2, fmt_italic)
+        c.add_cell_format(1, 1, 2, 2, bold=1)
+        assert {'italic': 1} == c.cells[0][0].cell_format._asdict(include_none=False)
+        assert {'bold': 1, 'italic': 1} == c.cells[1][1].cell_format._asdict(include_none=False)
+        assert {'bold': 1} == c.cells[2][2].cell_format._asdict(include_none=False)
