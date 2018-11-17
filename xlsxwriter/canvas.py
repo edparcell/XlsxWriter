@@ -87,12 +87,22 @@ class Canvas(object):
         else:
             self.cells[row][column].data = data
 
-    def set_cell_format(self, row, column, height, width, format):
-        assert 0 <= row < row + height < self.height
-        assert 0 <= column < column + width < self.width
+    def set_cell_format(self, row, column, height, width, cell_format):
+        assert 0 <= row < row + height <= self.height
+        assert 0 <= column < column + width <= self.width
         for i in range(row, row + height):
             for j in range(column, column + width):
-                self.cells[i][j].cell_format = format
+                self.cells[i][j].cell_format = cell_format
+
+    def add_cell_format(self, row, column, height, width, cell_format):
+        assert 0 <= row < row + height <= self.height
+        assert 0 <= column < column + width <= self.width
+        for i in range(row, row + height):
+            for j in range(column, column + width):
+                if self.cells[i][j].cell_format is None:
+                    self.cells[i][j].cell_format = cell_format
+                else:
+                    self.cells[i][j].cell_format = self.cells[i][j].cell_format + cell_format
 
     def set_border_format(self, row, column, height, width, border_format):
         for i in range(row, row + height):
