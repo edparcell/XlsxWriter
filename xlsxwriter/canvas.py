@@ -29,10 +29,27 @@ def mk_data_class(typename, field_names):
             return hash(tuple(self.__getattribute__(x) for x in field_names))
 
         def _asdict(self, include_none=True):
-            d = {x: self.__getattribute__(x) for x in field_names}
-            if not include_none:
-                d = {x: v for x, v in d.items() if v is not None}
-            return d
+            if include_none:
+                return {x: self.__getattribute__(x) for x in field_names}
+            else:
+                d = {}
+                for x in field_names:
+                    v = self.__getattribute__(x)
+                    if v is not None:
+                        d[x] = v
+                return d
+
+        def __add__(self, other):
+            result = C()
+            for x in field_names:
+                v = self.__getattribute__(x)
+                if v is not None:
+                    result.__setattr__(x, v)
+            for x in field_names:
+                v = other.__getattribute__(x)
+                if v is not None:
+                    result.__setattr__(x, v)
+            return result
 
     return C
 

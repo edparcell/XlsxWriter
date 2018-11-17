@@ -4,6 +4,7 @@ from datetime import date
 from ...workbook import Workbook
 from ...canvas import Canvas
 
+
 class TestCompareXLSXFiles(ExcelComparisonTest):
     """
     Test file created by XlsxWriter against a file created by Excel.
